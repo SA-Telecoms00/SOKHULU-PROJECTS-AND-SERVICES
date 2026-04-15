@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Our Services - SOKHULU PROJECTS AND SERVICES. Drum reconditioning, car valet, and automotive spray paint services.">
+    <title>Our Services | SOKHULU PROJECTS AND SERVICES</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Services Catalog Layout */
+        .services-catalog {
+            padding: 6rem 0 4rem;
+            overflow: visible;
+        }
+
+        .catalog-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            overflow: visible;
+        }
+
+        .catalog-header h1 {
+            font-size: 2.5rem;
+            color: var(--navy-blue);
+            margin-bottom: 1rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .catalog-header p {
+            color: var(--gray-medium);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .catalog-category {
+            background: var(--white);
+            border: 1px solid var(--gray-light);
+            border-radius: 12px;
+            overflow: visible;
+            transition: var(--transition-medium);
+        }
+
+        .catalog-category:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+        }
+
+        .category-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .category-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .catalog-category:hover .category-image img {
+            transform: scale(1.05);
+        }
+
+        .category-header {
+            background: linear-gradient(135deg, var(--primary-green), var(--navy-blue));
+            color: var(--white);
+            padding: 1.25rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            cursor: pointer;
+            overflow: visible;
+        }
+
+        .category-header-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .category-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .category-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.3;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            flex: 1;
+        }
+
+        .category-toggle {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 0.5rem;
+        }
+
+        .category-toggle.expanded {
+            transform: rotate(180deg);
+        }
+
+        .category-content {
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .category-content.expanded {
+            display: block;
+        }
+
+        .category-description {
+            color: var(--gray-medium);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .subcategory-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .subcategory-item {
+            margin-bottom: 0.75rem;
+        }
+
+        .subcategory-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--light-gray);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--navy-blue);
+            transition: var(--transition-fast);
+        }
+
+        .subcategory-link:hover {
+            background: var(--primary-green);
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .subcategory-link i {
+            color: var(--primary-green);
+            font-size: 0.9rem;
+        }
+
+        .subcategory-link:hover i {
+            color: var(--white);
+        }
+
+        .category-cta {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .category-cta .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+        }
+
+        /* Service Detail Modal */
+        .service-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .service-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 12px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-green), var(--navy-blue));
+            color: var(--white);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-description {
+            color: var(--gray-dark);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-features {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-features h4 {
+            color: var(--navy-blue);
+            margin-bottom: 0.75rem;
+        }
+
+        .modal-features ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+            color: var(--gray-dark);
+        }
+
+        .modal-features li {
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-cta {
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .catalog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .catalog-header h1 {
+                font-size: 2rem;
+            }
+
+            .category-title {
+                font-size: 1.1rem;
+                white-space: normal;
+            }
+
+            .category-header {
+                padding: 1rem;
+            }
+
+            .category-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .modal-content {
+                max-height: 95vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="index.html" class="logo">
+                    <img src="images/WhatsApp Image 2026-04-15 at 10.08.15.jpeg" alt="SOKHULU PROJECTS AND SERVICES" style="height: 70px; width: auto; object-fit: contain;">
+                </a>
+                <nav class="nav">
+                    <ul class="nav-list" id="navList">
+                        <li><a href="index.html" class="nav-link">Home</a></li>
+                        <li><a href="services.html" class="nav-link active">Services</a></li>
+                        <li><a href="contact.html" class="nav-link">Contact</a></li>
+                    </ul>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Services Catalog Section -->
+    <section class="section services-catalog">
+        <div class="container">
+            <div class="catalog-header">
+                <h1>Our Services</h1>
+                <p>Explore our comprehensive range of industrial and automotive solutions. Click on any category to view detailed service offerings.</p>
+            </div>
+
+            <div class="catalog-grid">
+                <!-- Drum Reconditioning Category -->
+                <div class="catalog-category">
+                    <div class="category-image">
+                        <img src="images/drum-reconditioning.jpg" alt="Drum Reconditioning Service" loading="lazy">
+                    </div>
+                    <div class="category-header" onclick="toggleCategory(this)">
+                        <div class="category-header-content">
+                            <div class="category-icon">
+                                <i class="fas fa-drum-steelpan"></i>
+                            </div>
+                            <span class="category-title">Drum Reconditioning</span>
+                        </div>
+                        <i class="fas fa-chevron-down category-toggle"></i>
+                    </div>
+                    <div class="category-content">
+                        <p class="category-description">Professional cleaning, refurbishing, and restoring of industrial steel drums to extend their lifecycle and ensure safe reuse.</p>
+                        <ul class="subcategory-list">
+                            <li class="subcategory-item">
+                                <a href="#" class="subcategory-link" onclick="openModal('drum')">
+                                    <i class="fas fa-circle-check"></i>
+                                    <span>Full Service Overview</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#" class="subcategory-link" onclick="openModal('drum')">
+                                    <i class="fas fa-search"></i>
+                                    <span>Inspection & Assessment</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#" class="subcategory-link" onclick="openModal('drum')">
+                                    <i class="fas fa-spray-can"></i>
+                                    <span>Cleaning & Repainting</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#" class="subcategory-link" onclick="openModal('drum')">
+                                    <i class="fas fa-tools"></i>
+                                    <span>Repair & Maintenance</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="category-cta">
+                            <a href="contact.html" class="btn btn-primary">
+                                <i class="fas fa-calculator"></i> Get Quote
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Car Valet Services Category -->
+                <div class="catalog-category">
+                    <div class="category-image">
+                        <img src="images/WhatsApp Image 2026-04-14 at 15.15.27.jpeg" alt="Car Valet Services" loading="lazy">
+                    </div>
+                    <div class="category-header" onclick="toggleCategory(this)">
+                        <div class="category-header-content">
+                            <div class="category-icon">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <span class="category-title">Car Valet Services</span>
+                        </div>
+                        <i class="fas fa-chevron-down category-toggle"></i>
+                    </div>
+                    <div class="category-content">
+                        <p class="category-description">Complete interior and exterior vehicle cleaning and detailing to restore your vehicle to showroom condition.</p>
+                        <ul class="subcategory-list">
+                            <li class="subcategory-item">
+                                <a href="#" class="subcategory-link" onclick="openModal('valet')">
+                                    <i class="fas fa-circle-check"></i>
+                                    <span>Full Service Overview</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#" class="subcategory-link" onclick="openModal('valet')">
+                                    <i class="fas fa-soap"></i>
+                                    <span>Exterior Wash & Detail</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#" class="subcategory-link" onclick="openModal('valet')">
+                                    <i class="fas fa-couch"></i>
+                                    <span>Interior Cleaning</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#" class="subcategory-link" onclick="openModal('valet')">
+                                    <i class="fas fa-truck"></i>
+                                    <span>Fleet Services</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="category-cta">
+                            <a href="contact.html" class="btn btn-primary">
+                                <i class="fas fa-calendar-check"></i> Book Service
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Car Spray Paint Services Category -->
+                <div class="catalog-category">
+                    <div class="category-image">
+                        <img src="images/WhatsApp Image 2026-04-14 at 15.17.09.jpeg" alt="Car Spray Paint Services" loading="lazy">
+                    </div>
+                    <div class="category-header" onclick="toggleCategory(this)">
+                        <div class="category-header-content">
+                            <div class="category-icon">
+                                <i class="fas fa-spray-can-sparkles"></i>
+                            </div>
+                            <span class="category-title">Car Spray Paint</span>
+                        </div>
+                        <i class="fas fa-chevron-down category-toggle"></i>
+                    </div>
+                    <div class="category-content">
+                        <p class="category-description">Expert automotive spray painting and refinishing services for flawless finishes and perfect color matching.</p>
+                        <ul class="subcategory-list">
+                            <li class="subcategory-item">
+                                <a href="#" class="subcategory-link" onclick="openModal('paint')">
+                                    <i class="fas fa-circle-check"></i>
+                                    <span>Full Service Overview</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#" class="subcategory-link" onclick="openModal('paint')">
+                                    <i class="fas fa-car-side"></i>
+                                    <span>Full Vehicle Respray</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#" class="subcategory-link" onclick="openModal('paint')">
+                                    <i class="fas fa-palette"></i>
+                                    <span>Panel Painting</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="#" class="subcategory-link" onclick="openModal('paint')">
+                                    <i class="fas fa-wand-magic-sparkles"></i>
+                                    <span>Custom Finishes</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="category-cta">
+                            <a href="contact.html" class="btn btn-primary">
+                                <i class="fas fa-paint-roller"></i> Get Quote
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Modal -->
+    <div class="service-modal" id="serviceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Service Details</h2>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo" style="margin-bottom: 1rem;">
+                        <img src="images/WhatsApp Image 2026-04-15 at 10.08.15.jpeg" alt="SOKHULU PROJECTS AND SERVICES" style="height: 70px; width: auto; object-fit: contain;">
+                    </a>
+                    <p>Your trusted partner for industrial drum reconditioning, car valet services, and automotive spray painting. Quality workmanship guaranteed.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <div class="footer-links">
+                        <a href="index.html">Home</a>
+                        <a href="services.html">Our Services</a>
+                        <a href="contact.html">Contact Us</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Our Services</h4>
+                    <div class="footer-links">
+                        <a href="services.html#drum">Drum Reconditioning</a>
+                        <a href="services.html#valet">Car Valet Services</a>
+                        <a href="services.html#paint">Car Spray Paint</a>
+                    </div>
+                </div>
+                <div class="footer-column footer-contact">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-phone"></i> +27670526292</p>
+                    <p><i class="fas fa-envelope"></i> info@sokhuluprojects.co.za</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Unit 25 Pilkintons Industrial Park, Meyerton, Gauteng</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SOKHULU PROJECTS AND SERVICES. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Service data
+        const serviceData = {
+            drum: {
+                title: 'Drum Reconditioning',
+                image: 'images/drum-reconditioning.jpg',
+                description: 'Our drum reconditioning service transforms used, damaged, or contaminated industrial drums into like-new condition. We handle everything from initial inspection to final quality control, ensuring your drums meet industry standards for safe reuse.',
+                features: [
+                    'Thorough inspection and assessment of drum condition',
+                    'High-pressure washing and specialized cleaning for residue removal',
+                    'Dent removal, leak testing, and structural repairs',
+                    'Protective coating application for durability',
+                    'Final inspection and certification for reuse'
+                ],
+                ctaText: 'Request a Quote',
+                ctaLink: 'contact.html'
+            },
+            valet: {
+                title: 'Car Valet Services',
+                image: 'images/WhatsApp Image 2026-04-14 at 15.15.27.jpeg',
+                description: 'Our professional car valet services cater to individual vehicle owners, corporate fleets, and car dealerships. Using premium products and techniques, we deliver exceptional results that protect your vehicle\'s value and appearance.',
+                features: [
+                    'Hand wash, wax, tire dressing, and rim cleaning',
+                    'Vacuum, dashboard cleaning, window cleaning, air freshening',
+                    'Leather conditioning, engine bay cleaning, headlight restoration',
+                    'Customized packages for commercial vehicle fleets',
+                    'Premium detailing products for showroom finish'
+                ],
+                ctaText: 'Book Valet Service',
+                ctaLink: 'contact.html'
+            },
+            paint: {
+                title: 'Car Spray Paint Services',
+                image: 'images/WhatsApp Image 2026-04-14 at 15.17.09.jpeg',
+                description: 'Our state-of-the-art paint booths and skilled technicians deliver showroom-quality finishes for any vehicle. From minor touch-ups to complete resprays, we use premium automotive paints and advanced techniques to ensure lasting results.',
+                features: [
+                    'Complete vehicle color changes and restorations',
+                    'Individual panel repairs and matching',
+                    'Precision touch-ups and spot repairs',
+                    'Metallic, pearl, and specialty paint effects',
+                    'Commercial vehicle branding and painting'
+                ],
+                ctaText: 'Get Paint Quote',
+                ctaLink: 'contact.html'
+            }
+        };
+
+        // Toggle category expansion
+        function toggleCategory(header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector('.category-toggle');
+            
+            content.classList.toggle('expanded');
+            toggle.classList.toggle('expanded');
+        }
+
+        // Open modal
+        function openModal(serviceId) {
+            event.preventDefault();
+            const service = serviceData[serviceId];
+            const modal = document.getElementById('serviceModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+
+            modalTitle.textContent = service.title;
+            modalBody.innerHTML = `
+                <img src="${service.image}" alt="${service.title}" class="modal-image">
+                <p class="modal-description">${service.description}</p>
+                <div class="modal-features">
+                    <h4>Key Features:</h4>
+                    <ul>
+                        ${service.features.map(f => `<li>${f}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="modal-cta">
+                    <a href="${service.ctaLink}" class="btn btn-primary">
+                        <i class="fas fa-arrow-right"></i> ${service.ctaText}
+                    </a>
+                </div>
+            `;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeModal() {
+            const modal = document.getElementById('serviceModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on outside click
+        document.getElementById('serviceModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Expand first category by default
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstCategory = document.querySelector('.category-header');
+            if (firstCategory) {
+                toggleCategory(firstCategory);
+            }
+        });
+    </script>
+</body>
+</html>
